@@ -1,4 +1,10 @@
 <?php 
+/**
+ * Template Name: Book
+ *
+ * @package WordPress
+ * @subpackage Titi
+ */
 
 get_header(); ?>	
 

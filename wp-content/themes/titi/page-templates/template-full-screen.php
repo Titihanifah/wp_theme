@@ -1,4 +1,7 @@
 <?php 
+/**
+ * Template Name: Full-Screen
+ */
 
 get_header(); ?>
 

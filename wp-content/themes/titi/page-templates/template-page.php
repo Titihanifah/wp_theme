@@ -1,4 +1,10 @@
 <?php 
+/**
+ * Template Name: Page
+ *
+ * @package WordPress
+ * @subpackage Titi
+ */
 
 get_header(); ?>
 
@@ -78,7 +84,7 @@ get_header(); ?>
 				<div class="alignleft"><?php previous_posts_link('&laquo; Previous Entries') ?></div>
 			 	<div class="alignright"><?php next_posts_link('Next Entries &raquo;','') ?></div>
 			</div>
-			<div class="col-md-4">
+			<div class="col-md-4">								
 			    <?php get_sidebar(); ?>
 			</div>
         </div>
