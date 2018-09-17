@@ -12,7 +12,7 @@ get_header(); ?>
 	<div class="container">
       	<div class="row">
       		<div class="col-md-8">      			
-		<?php while ( have_posts() ) {
+		<?php 
 
 			$args = array( 'post_type' => 'book', 'posts_per_page' => 10 );
 					$loop = new WP_Query( $args );
@@ -22,15 +22,15 @@ get_header(); ?>
 					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
 					            <div class="card-body">
 					              	<h2 class="card-title">';					
-					  	the_excerpt();
+					  	the_title();
 					  	echo '</h2><p class="card-text">';
-					  	the_content();
+					  	the_excerpt();
 					  	echo '</p>';
 					  	echo '<a href="';
 					  	the_permalink();
 					  	echo '" class="btn btn-primary">Read More &rarr;</a></div></div>';
 					} 
-		     } ?>
+		     ?>
 	      	</div>
 	    </div>
 	</div>

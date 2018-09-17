@@ -26,12 +26,12 @@ body {
   }
 }
 
-.navbar-nav ul li {
+.my_extra_menu_class ul li {
     list-style-type: none;
     list-style: none;
     list-style-image: none;
 }
-.navbar-nav ul li {
+.my_extra_menu_class ul li {
     display: inline;
 }
 

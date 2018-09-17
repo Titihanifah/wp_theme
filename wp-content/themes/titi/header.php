@@ -24,16 +24,18 @@
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          
-          <ul class="navbar-nav ml-auto">
-            <li>
-              <?php wp_nav_menu( array(
-                'theme_location' => 'extra-menu',
-                'container_class' => 'my_extra_menu_class'
-              )); ?>
-            </li>
-          </ul>
+        <div class="collapse navbar-collapse" id="navbarResponsive">         
+          <?php wp_nav_menu( array(
+            'theme_location' => 'primary-menu',
+            'container_class' => 'my_extra_menu_class'
+          )); ?>
         </div>
+
+        <!-- <?php wp_nav_menu( array(
+          'theme_location' => 'primary-menu',
+          'container_class' => 'my_extra_menu_class'
+        )); ?> -->
+            
+
       </div>
     </nav>

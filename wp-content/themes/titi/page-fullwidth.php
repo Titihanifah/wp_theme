@@ -1,12 +1,20 @@
 <?php 
 
+/**
+ * Template Name: Page Full Width
+ *
+ * @package WordPress
+ * @subpackage Titi
+ */
+
+
 get_header(); ?>
 	
 
 <?php if ( have_posts() ) { ?>
 	<div class="container">
       	<div class="row">
-      		<div class="col-md-8">      			
+      		<div class="col-md-12">      			
 		<?php while ( have_posts() ) {
 
 			the_post(); ?>   
@@ -23,13 +31,6 @@ get_header(); ?>
 		            </div>
 		         </div>
 	      	</div>
-	      	<div class="col-md-4">
-				<?php if(is_active_sidebar('sidebar-1')): ?>
-					<div id="secondary" class="widget-area" role="complementary">
-						<?php dynamic_sidebar('sidebar-1'); ?>					
-					</div>							
-				<?php endif; ?>
-			</div>
 	    </div>
 	</div>
 

@@ -38,9 +38,9 @@ get_header(); ?>
 					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
 					            <div class="card-body">
 					              	<h2 class="card-title">';					
-					  	the_excerpt();
+					  	the_title();
 					  	echo '</h2><p class="card-text">';
-					  	the_content();
+					  	the_excerpt();
 					  	echo '</p>';
 					  	echo '<a href="';
 					  	the_permalink();

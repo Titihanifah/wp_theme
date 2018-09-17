@@ -35,9 +35,9 @@ get_header(); ?>
 					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
 					            <div class="card-body">
 					              	<h2 class="card-title">';					
-					  	the_excerpt();
+					  	the_title();
 					  	echo '</h2><p class="card-text">';
-					  	the_content();
+					  	the_excerpt();
 					  	echo '</p>';
 					  	echo '<a href="';
 					  	the_permalink();
@@ -79,7 +79,6 @@ get_header(); ?>
 			 	<div class="alignright"><?php next_posts_link('Next Entries &raquo;','') ?></div>
 			</div>
 			<div class="col-md-4">
-			    <?php get_sidebar(); ?>
 			</div>
         </div>
     </div>

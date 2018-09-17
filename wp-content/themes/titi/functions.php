@@ -29,6 +29,7 @@
 	      'public' => true,
 	      'has_archive' => true,
 	      'rewrite' => array('slug' => 'book'),
+	      'menu_icon' => 'dashicons-book',
 	    )
 	  );
 		
@@ -104,18 +105,19 @@
 	//register menu
 	register_nav_menus( array(
 		'primary-menu' => __( 'Primary Menu', 'titi' ),
+		'footer-menu' => __( 'Footer Menu' ),
 	) );
 
-	function register_my_menus() {
-	  register_nav_menus(
-	    array(
-	      'header-menu' => __( 'Header Menu' ),
-	      'extra-menu' => __( 'Extra Menu' )
-	     )
-	   );
-	 }
+	// function register_my_menus() {
+	//   register_nav_menus(
+	//     array(
+	      
+	//       'extra-menu' => __( 'Extra Menu' )
+	//      )
+	//    );
+	//  }
 
- 	add_action( 'init', 'register_my_menus' );
+ // 	add_action( 'init', 'register_my_menus' );
 
 	
 	// sidebar
@@ -142,36 +144,29 @@
 
 	// apply_filters( 'get_search_query', $search );
 
-	// theme option
+	// Logo Option - submenu Thema
 	function mytheme_panel() {
 
 	    // berisi layout HTML.
 	    ?>
 	    <div>
-	    	<h1>Upload Logo</h1>
+	    	<h1>Copyright</h1>
 	    </div>
 	    <div class="container">
 		    <div class="row">    
-		        <div class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">  
-		            <!-- image-preview-filename input [CUT FROM HERE]-->
-		            <div class="input-group image-preview">
-		                <input type="text" class="form-control image-preview-filename" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
-		                <span class="input-group-btn">
-		                    <!-- image-preview-clear button -->
-		                    <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
-		                        <span class="glyphicon glyphicon-remove"></span> Clear
-		                    </button>
-		                    <!-- image-preview-input -->
-		                    <div class="btn btn-default image-preview-input">
-		                        <span class="glyphicon glyphicon-folder-open"></span>
-		                        <input type="file" accept="image/png, image/jpeg, image/gif" name="input-file-preview"/> <!-- rename it -->
-		                    </div>
-		                </span>
-		            </div><!-- /input-group image-preview [TO HERE]--> 
+		        <div class="col-xs-12 col-md-12">  
+		        	<form method="POST" action="option.php">
+		        	<?php 
+		        		setttings_fields("section");
+		        		do_settings_sections("theme-options");
+		        		submit_button();
+		        	?>		        		
+		            	<input type="text" class="form-control" >
+						<button class="btn btn-primary">Save Changes</button>
+		        	</form>
 		        </div>
 		    </div>
 		</div>
-		<button class="btn btn-primary">Save Changes</button>
 
 
 	<?php
@@ -180,13 +175,18 @@
 	function mytheme_init() {
 
 	    //initialize. isinya rutin untuk misalnya, save/edit options 
-	    add_theme_page( "Logo Options", "Logo Options", 'edit_themes', basename( __FILE__ ), 'mytheme_panel' );
+	    add_theme_page( "Copyright Options", "Copyright Options", 'edit_copyright', basename( __FILE__ ), 'mytheme_panel' );
 	    // add_menu_page( 'Custom Logo ', 'Logo Options', 'manage_options', 'custompage', '', 'dashicons-welcome-widgets-menus', 90 );
 	}
 
+	// 
+
+	
+
 	add_action( 'admin_menu', 'mytheme_init' );
 
-	// add menu custom logo
+
+	// add submenu change logo dragablle customize - side identity
 	function theme_prefix_setup() {
 	
 		add_theme_support( 'custom-logo', array(
@@ -216,28 +216,23 @@
 	}
 
 
-	add_action('admin_menu', 'awesome_page_create');
-	
+	// create menu logo 
 
-	// create menu logo settings
-	function awesome_page_create() {
+	add_action('admin_menu', 'logo_page_create');
+	
+	function logo_page_create() {
 	    $page_title = 'Logo';
 	    $menu_title = 'Logo';
 	    $capability = 'edit_posts';
-	    $menu_slug = 'awesome_page';
-	    $function = 'my_awesome_page_display';
+	    $menu_slug = 'logo_page';
+	    $function = 'my_logo_page_display';
 	    $icon_url = '';
 	    $position = 24;
 
 	    add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
 	}
 
-	function my_awesome_page_display() {
-		// if (!current_user_can('manage_options')) {
-	 //        wp_die('Unauthorized user');
-	 //    }
-
-	    // check_admin_referrer( 'wpshout_option_page_example_action' );
+	function my_logo_page_display() {
 
 	    if (isset($_POST['input_file'])) {
 	        update_option('input_file', $_POST['input_file']);
@@ -247,6 +242,90 @@
 
 	    include 'form-file.php';
 	}
+
+	// filter show excerpt 50 character
+	add_filter("the_excerpt", "plugin_the_excerpt_filter");
+
+	function plugin_the_excerpt_filter($excerpt)
+	{
+	    // Take the existing content and return a subset of it
+	    return substr($excerpt, 0, 50);
+	}
+
+
+	
+	// function theme_section_description(){
+	// 	echo '<p>Theme Option Section</p>';
+	// }
+
+	// function add_theme_menu_item() {
+	// 	add_theme_page("Theme Customization", "Theme Customization", "manage_options", "theme-options", "theme_option_page", null, 99);
+	// }
+	// add_action("admin_menu", "add_theme_menu_item");
+
+	// function theme_section_description()
+	// {
+	// 	echo '<p>Theme Option Section</p>';
+	// }
+
+	// function options_callback(){
+	// 	$options = get_option( 'first_field_option' );
+	// 	echo '<input name="first_field_option" id="first_field_option" type="checkbox" value="1" class="code" ' . checked( 1, $options, false ) . ' /> Check for enabling custom help text.';
+	// }
+	// //admin-init hook to create settings section with title “New Theme Options Section”.
+	// function test_theme_settings(){
+	// 	add_option('first_field_option',1);// add theme option to database
+	// 	add_settings_section( 'first_section', 'New Theme Options Section','theme_section_description','theme-options');
+
+	// 	add_settings_field('first_field_option','Test Settings Field','options_callback','theme-options','first_section');
+	// 	//add settings field to the section “first_section”
+	// 	register_setting( 'theme-options-grp', 'first_field_option');
+	// }
+	
+
+	// add_action('admin_init','test_theme_settings');
+
+
+	function theme_option_page() {
+		?>
+		<div class="wrap">
+			<form method="post" action="options.php">
+				<?php
+				// display settings field on theme-option page
+				settings_fields("theme-options-grp");
+				// display all sections for theme-options page
+				do_settings_sections("theme-options");
+				submit_button();
+				?>
+			</form>
+		</div>
+		<?php
+	}
+	function add_theme_menu_item() {
+		add_theme_page("Copyright Customization", "Copyright", "manage_options", "theme-options", "theme_option_page", null, 99);
+	}
+	add_action("admin_menu", "add_theme_menu_item");
+	function theme_section_description(){
+		echo '';
+	}
+	
+	function test_theme_settings(){
+		add_settings_section( 'first_section', 'Edit Copyright','theme_section_description','theme-options');
+		add_settings_field('twitter_url', 'Copyright ', 'display_test_twitter_element', 'theme-options', 'first_section');
+		register_setting( 'theme-options-grp', 'copyright');
+	}
+	add_action('admin_init','test_theme_settings');
+
+	
+
+	function display_test_twitter_element(){
+		?>
+		<input type="text" name="copyright" id="copyright" value="<?php echo get_option('copyright'); ?>" />
+		<?php
+	}
+
+
+
 
 
 

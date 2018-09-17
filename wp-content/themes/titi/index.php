@@ -35,9 +35,9 @@ get_header(); ?>
 					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
 					            <div class="card-body">
 					              	<h2 class="card-title">';					
-					  	the_excerpt();
+					  	the_title();
 					  	echo '</h2><p class="card-text">';
-					  	the_content();
+					  	the_excerpt();
 					  	echo '</p>';
 					  	echo '<a href="';
 					  	the_permalink();
@@ -46,39 +46,18 @@ get_header(); ?>
 								
 				}  
 
-				 	// list categories
-					$taxonomy = 'category';
-					 
-					// Get the term IDs assigned to post.
-					$post_terms = wp_get_object_terms( $post->ID, $taxonomy, array( 'fields' => 'ids' ) );
-					 
-					// Separator between links.
-					$separator = ', ';
-					 
-					if ( ! empty( $post_terms ) && ! is_wp_error( $post_terms ) ) 
-					{
-					 
-					    $term_ids = implode( ',' , $post_terms );
-					 
-					    $terms = wp_list_categories( array(
-					        'title_li' => '',
-					        'style'    => 'none',
-					        'echo'     => false,
-					        'taxonomy' => $taxonomy,
-					        'include'  => $term_ids
-					    ) );
-					 
-					    $terms = rtrim( trim( str_replace( '<br />',  $separator, $terms ) ), $separator );
-					 
-					    // Display post categories.
-					    echo  $terms;
-					} ?>
+				 	?>
 			</div>
 			<div class="navigation">
 				<div class="alignleft"><?php previous_posts_link('&laquo; Previous Entries') ?></div>
 			 	<div class="alignright"><?php next_posts_link('Next Entries &raquo;','') ?></div>
 			</div>
 			<div class="col-md-4">
+				<?php if(is_active_sidebar('sidebar-1')): ?>
+					<div id="secondary" class="widget-area" role="complementary">
+						<?php dynamic_sidebar('sidebar-1'); ?>					
+					</div>							
+				<?php endif; ?>
 			</div>
         </div>
     </div>

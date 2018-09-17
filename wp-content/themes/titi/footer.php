@@ -1,6 +1,12 @@
 	<footer class="py-5 bg-dark">
-	  <div class="container">
-	    <p class="m-0 text-center text-white">Copyright &copy; Your Website 2018</p>
+	  	<div class="container">
+	    	<p class="m-0 text-center text-white"><?php $copyright= get_option('copyright');?> <?php echo $copyright ?></p>
+	  	</div>
+	  	<div>
+			<?php wp_nav_menu( array(
+		        'theme_location' => 'footer-menu',
+		        'container_class' => 'my_extra_menu_class'
+		    )); ?>
 	  </div>
 	  <!-- /.container -->
 	</footer>

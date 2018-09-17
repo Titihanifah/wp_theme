@@ -6,11 +6,12 @@ get_header(); ?>
 <?php if ( have_posts() ) { ?>
 	<div class="container">
       	<div class="row">
-      		<div class="col-md-8">      			
+      		<div class="col-md-8">
+
 		<?php while ( have_posts() ) {
 
 			the_post(); ?>   
-
+				<h1 class="my-4"><?php the_title();?></h1>  
 	          	<div class="card mb-4">
 		            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
 		            <div class="card-body">
