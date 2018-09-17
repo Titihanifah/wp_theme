@@ -311,25 +311,71 @@
 	
 	function test_theme_settings(){
 		add_settings_section( 'first_section', 'Edit Copyright','theme_section_description','theme-options');
-		add_settings_field('twitter_url', 'Copyright ', 'display_test_twitter_element', 'theme-options', 'first_section');
+		add_settings_field('twitter_url', 'Copyright ', 'display_copyright', 'theme-options', 'first_section');
 		register_setting( 'theme-options-grp', 'copyright');
 	}
 	add_action('admin_init','test_theme_settings');
 
 	
 
-	function display_test_twitter_element(){
+	function display_copyright(){
 		?>
 		<input type="text" name="copyright" id="copyright" value="<?php echo get_option('copyright'); ?>" />
 		<?php
 	}
 
+	// END COPYRIGHT
 
+	
 
+	// POST_META
 
+	add_action( 'add_meta_boxes', 'cd_meta_box_add' );
+	function cd_meta_box_add()
+	{
+	    add_meta_box( 'my-meta-box-id', 'Pages', 'cd_meta_box_cb', 'book', 'normal', 'high' );
+	}
 
+	function cd_meta_box_cb()
+	{
+		$values = get_post_custom( $post->ID );
+		$text = isset( $values['my_meta_box_text'] ) ? esc_attr( $values['my_meta_box_text'][0] ) : '';
 
+		?>
+	    <label for="my_meta_box_text">Halaman</label>
+	    <input type="text" name="my_meta_box_text" id="my_meta_box_text" />
+	    <?php  
+	}
+	add_action( 'save_post', 'cd_meta_box_save' );
 
-
+	function cd_meta_box_save( $post_id )
+	{
+	    // Bail if we're doing an auto save
+	    if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+	     
+	    // if our nonce isn't there, or we can't verify it, bail
+	    if( !isset( $_POST['meta_box_nonce'] ) || !wp_verify_nonce( $_POST['meta_box_nonce'], 'my_meta_box_nonce' ) ) return;
+	     
+	    // if our current user can't edit this post, bail
+	    if( !current_user_can( 'edit_post' ) ) return;
+	     
+	    // now we can actually save the data
+	    $allowed = array( 
+	        'a' => array( // on allow a tags
+	            'href' => array() // and those anchors can only have href attribute
+	        )
+	    );
+	     
+	    // Make sure your data is set before trying to save it
+	    if( isset( $_POST['my_meta_box_text'] ) )
+	        update_post_meta( $post_id, 'my_meta_box_text', wp_kses( $_POST['my_meta_box_text'], $allowed ) );
+	         
+	    if( isset( $_POST['my_meta_box_select'] ) )
+	        update_post_meta( $post_id, 'my_meta_box_select', esc_attr( $_POST['my_meta_box_select'] ) );
+	         
+	    // This is purely my personal preference for saving check-boxes
+	    $chk = isset( $_POST['my_meta_box_check'] ) && $_POST['my_meta_box_select'] ? 'on' : 'off';
+	    update_post_meta( $post_id, 'my_meta_box_check', $chk );
+	}
 
 	
