@@ -123,10 +123,10 @@
 	    register_sidebar( array(
 	        'name'          => __( 'Primary Sidebar', 'theme_name' ),
 	        'id'            => 'sidebar-1',
-	        'before_widget' => '<aside id="%1$s" class="widget %2$s">',
-	        'after_widget'  => '</aside>',
-	        'before_title'  => '<h1 class="widget-title">',
-	        'after_title'   => '</h1>',
+	        'before_widget' => '<div class="card my-4">	<div class="card-body"><ul class="list-unstyled mb-0"><li>',
+	        'after_widget'  => '</li></ul></div></div>',
+	        'before_title'  => '<h5 class="card-header">',
+	        'after_title'   => '</h5>',
 	    ) );
 	 
 	    register_sidebar( array(
@@ -140,5 +140,117 @@
 	}
 	add_action( 'widgets_init', 'themename_widgets_init' );
 
-	apply_filters( 'get_search_query', $search );
+	// apply_filters( 'get_search_query', $search );
 
+	// theme option
+	function mytheme_panel() {
+
+	    // berisi layout HTML.
+	    ?>
+	    <div>
+	    	<h1>Upload Logo</h1>
+	    </div>
+	    <div class="container">
+		    <div class="row">    
+		        <div class="col-xs-12 col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">  
+		            <!-- image-preview-filename input [CUT FROM HERE]-->
+		            <div class="input-group image-preview">
+		                <input type="text" class="form-control image-preview-filename" disabled="disabled"> <!-- don't give a name === doesn't send on POST/GET -->
+		                <span class="input-group-btn">
+		                    <!-- image-preview-clear button -->
+		                    <button type="button" class="btn btn-default image-preview-clear" style="display:none;">
+		                        <span class="glyphicon glyphicon-remove"></span> Clear
+		                    </button>
+		                    <!-- image-preview-input -->
+		                    <div class="btn btn-default image-preview-input">
+		                        <span class="glyphicon glyphicon-folder-open"></span>
+		                        <input type="file" accept="image/png, image/jpeg, image/gif" name="input-file-preview"/> <!-- rename it -->
+		                    </div>
+		                </span>
+		            </div><!-- /input-group image-preview [TO HERE]--> 
+		        </div>
+		    </div>
+		</div>
+		<button class="btn btn-primary">Save Changes</button>
+
+
+	<?php
+	}
+
+	function mytheme_init() {
+
+	    //initialize. isinya rutin untuk misalnya, save/edit options 
+	    add_theme_page( "Logo Options", "Logo Options", 'edit_themes', basename( __FILE__ ), 'mytheme_panel' );
+	    // add_menu_page( 'Custom Logo ', 'Logo Options', 'manage_options', 'custompage', '', 'dashicons-welcome-widgets-menus', 90 );
+	}
+
+	add_action( 'admin_menu', 'mytheme_init' );
+
+	// add menu custom logo
+	function theme_prefix_setup() {
+	
+		add_theme_support( 'custom-logo', array(
+			'height'      => 50,
+			'width'       => 200,
+			'flex-width' => true,
+		) );
+
+	}
+	add_action( 'after_setup_theme', 'theme_prefix_setup' );
+
+	function theme_prefix_the_custom_logo() {
+	
+		if ( function_exists( 'the_custom_logo' ) ) {
+			the_custom_logo();
+		}
+
+	}
+
+	add_filter('get_custom_logo','change_logo_class');
+ 
+ 
+	function change_logo_class($html)
+	{
+		$html = str_replace('custom-logo-link', 'navbar-brand', $html);
+		return $html;
+	}
+
+
+	add_action('admin_menu', 'awesome_page_create');
+	
+
+	// create menu logo settings
+	function awesome_page_create() {
+	    $page_title = 'Logo';
+	    $menu_title = 'Logo';
+	    $capability = 'edit_posts';
+	    $menu_slug = 'awesome_page';
+	    $function = 'my_awesome_page_display';
+	    $icon_url = '';
+	    $position = 24;
+
+	    add_menu_page( $page_title, $menu_title, $capability, $menu_slug, $function, $icon_url, $position );
+	}
+
+	function my_awesome_page_display() {
+		// if (!current_user_can('manage_options')) {
+	 //        wp_die('Unauthorized user');
+	 //    }
+
+	    // check_admin_referrer( 'wpshout_option_page_example_action' );
+
+	    if (isset($_POST['input_file'])) {
+	        update_option('input_file', $_POST['input_file']);
+	    } 
+
+	    $value = get_option('input_file');
+
+	    include 'form-file.php';
+	}
+
+
+
+
+
+
+	
