@@ -13,7 +13,7 @@ get_header(); ?>
 					{
 						the_post(); ?>          
 				          	<div class="card mb-4">
-					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+					            <?php the_post_thumbnail(); ?>
 					            <div class="card-body">
 					              	<h2 class="card-title"><?php the_title(); ?></h2>
 					              	<p class="card-text"><?php the_excerpt(); ?></p>
@@ -31,9 +31,9 @@ get_header(); ?>
 					$loop = new WP_Query( $args );
 					while ( $loop->have_posts() ) {
 						$loop->the_post();	
-						echo '<div class="card mb-4">
-					            <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-					            <div class="card-body">
+						echo '<div class="card mb-4">';
+					            the_post_thumbnail();
+				    	echo '<div class="card-body">
 					              	<h2 class="card-title">';					
 					  	the_title();
 					  	echo '</h2><p class="card-text">';

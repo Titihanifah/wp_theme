@@ -4,9 +4,12 @@
 		// Add Bootstrap, used in the main stylesheet.
 		wp_enqueue_style( 'bootstrap', get_template_directory_uri() . '/bootstrap/css/bootstrap.css', array(), '4.1.1' );
 
+		wp_enqueue_style( 'font-awesome', get_template_directory_uri() . '/bootstrap/css/font-awesome.css', array(), '4.0.0' );	
+	
 		// Theme stylesheet.
 		wp_enqueue_style( 'style', get_stylesheet_uri() ); 
-
+		
+		
 		wp_enqueue_script("jquery");
 
 	  	wp_enqueue_script( 'bootstrap', get_template_directory_uri() . '/bootstrap/js/bootstrap.bundle.min.js', array(), '4.1.1' );
@@ -102,23 +105,14 @@
 	// hook into the init action and call create_book_taxonomies when it fires
 	add_action( 'init', 'create_book_taxonomies', 0 );
 
+	// using bootsrap navwalker
+	require_once get_template_directory() . '/class-wp-bootstrap-navwalker.php';
+
 	//register menu
 	register_nav_menus( array(
 		'primary-menu' => __( 'Primary Menu', 'titi' ),
 		'footer-menu' => __( 'Footer Menu' ),
 	) );
-
-	// function register_my_menus() {
-	//   register_nav_menus(
-	//     array(
-	      
-	//       'extra-menu' => __( 'Extra Menu' )
-	//      )
-	//    );
-	//  }
-
- // 	add_action( 'init', 'register_my_menus' );
-
 	
 	// sidebar
 	function themename_widgets_init() {
@@ -178,10 +172,6 @@
 	    add_theme_page( "Copyright Options", "Copyright Options", 'edit_copyright', basename( __FILE__ ), 'mytheme_panel' );
 	    // add_menu_page( 'Custom Logo ', 'Logo Options', 'manage_options', 'custompage', '', 'dashicons-welcome-widgets-menus', 90 );
 	}
-
-	// 
-
-	
 
 	add_action( 'admin_menu', 'mytheme_init' );
 
@@ -333,25 +323,28 @@
 	add_action( 'add_meta_boxes', 'cd_meta_box_add' );
 	function cd_meta_box_add()
 	{
+		// param id, title, function, slug, content(normal,side,advanced), priority
 	    add_meta_box( 'my-meta-box-id', 'Pages', 'cd_meta_box_cb', 'book', 'normal', 'high' );
 	}
 
 	function cd_meta_box_cb()
 	{
+		// id that retrieved
 		$values = get_post_custom( $post->ID );
 		$text = isset( $values['my_meta_box_text'] ) ? esc_attr( $values['my_meta_box_text'][0] ) : '';
 
 		?>
-	    <label for="my_meta_box_text">Halaman</label>
+		<!-- label n form for meta -->
+	    <label for="my_meta_box_texts">Halaman</label>
 	    <input type="text" name="my_meta_box_text" id="my_meta_box_text" />
 	    <?php  
 	}
-	add_action( 'save_post', 'cd_meta_box_save' );
 
+	add_action( 'save_post', 'cd_meta_box_save' );
 	function cd_meta_box_save( $post_id )
 	{
 	    // Bail if we're doing an auto save
-	    if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+	    // if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 	     
 	    // if our nonce isn't there, or we can't verify it, bail
 	    if( !isset( $_POST['meta_box_nonce'] ) || !wp_verify_nonce( $_POST['meta_box_nonce'], 'my_meta_box_nonce' ) ) return;
@@ -360,22 +353,75 @@
 	    if( !current_user_can( 'edit_post' ) ) return;
 	     
 	    // now we can actually save the data
-	    $allowed = array( 
-	        'a' => array( // on allow a tags
-	            'href' => array() // and those anchors can only have href attribute
-	        )
-	    );
-	     
+	    
 	    // Make sure your data is set before trying to save it
 	    if( isset( $_POST['my_meta_box_text'] ) )
-	        update_post_meta( $post_id, 'my_meta_box_text', wp_kses( $_POST['my_meta_box_text'], $allowed ) );
-	         
-	    if( isset( $_POST['my_meta_box_select'] ) )
-	        update_post_meta( $post_id, 'my_meta_box_select', esc_attr( $_POST['my_meta_box_select'] ) );
-	         
-	    // This is purely my personal preference for saving check-boxes
-	    $chk = isset( $_POST['my_meta_box_check'] ) && $_POST['my_meta_box_select'] ? 'on' : 'off';
-	    update_post_meta( $post_id, 'my_meta_box_check', $chk );
+	    	// param id, meta key, custom field edit, new value, 
+	        update_post_meta( $post_id, 'my_meta_box_text', wp_kses( $_POST['my_meta_box_text']) );
+	       
+	  
 	}
 
+	if( function_exists('acf_add_options_page') ) {
+
+  /// Register Theme Settings parent page
+		acf_add_options_page(array(
+			'page_title'  => 'Theme General Settings',
+			'menu_title'  => 'Theme General Settings',
+			'menu_slug'   => 'theme-general-settings',
+			'capability'  => 'edit_posts',
+			'redirect'    => false
+		)); 
+
+  
+	}
+
+
+	add_theme_support( 'post-thumbnails' );
+	set_post_thumbnail_size( 3000, 3000);
+
+	//
 	
+	add_theme_support('post-thumbnails');
+
+	add_action('init', 'codex_portofolio_init');
+	//post type
+	function codex_portofolio_init()
+	{
+	   register_post_type(
+	   'portofolio',
+	    array( // Arguments
+	      'labels'             => array(
+	        'name'               => _x('Portofolio', 'post type general name', 'your-plugin-textdomain'),
+	        'singular_name'      => _x('Portofolio', 'post type singular name', 'your-plugin-textdomain'),
+	        'menu_name'          => _x('Portofolio', 'admin menu', 'your-plugin-textdomain'),
+	        'name_admin_bar'     => _x('Portofolio', 'add new on admin bar', 'your-plugin-textdomain'),
+	        'add_new'            => _x('Add New', 'portofolio', 'your-plugin-textdomain'),
+	        'add_new_item'       => __('Add New Portofolio', 'your-plugin-textdomain'),
+	        'new_item'           => __('New Portofolio', 'your-plugin-textdomain'),
+	        'edit_item'          => __('Edit Portofolio', 'your-plugin-textdomain'),
+	        'view_item'          => __('View Portofolio', 'your-plugin-textdomain'),
+	        'all_items'          => __('All Portofolios', 'your-plugin-textdomain'),
+	        'search_items'       => __('Search Portofolio', 'your-plugin-textdomain'),
+	        'parent_item_colon'  => __('Parent Portofolio:', 'your-plugin-textdomain'),
+	        'not_found'          => __('No portofolio found.', 'your-plugin-textdomain'),
+	        'not_found_in_trash' => __('No portofolio found in Trash.', 'your-plugin-textdomain')
+	      ),
+	      'public'             => true,
+	      'publicly_queryable' => true,
+	      'show_ui'            => true,
+	      'show_in_menu'       => true,
+	      'query_var'          => true,
+	      'rewrite'            => array( 'slug' => 'portofolio' ),
+	      'capability_type'    => 'post',
+	      'has_archive'        => true,
+	      'hierarchical'       => false,
+	      'menu_position'      => null,
+	      'supports'           => array( 'title','thumbnail','editor','comments')
+	    )
+	  );
+	}
+
+
+
+

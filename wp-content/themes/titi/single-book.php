@@ -1,7 +1,7 @@
 <?php 
 
 get_header(); ?>
-	
+
 
 <?php if ( have_posts() ) { ?>
 	<div class="container">
@@ -20,13 +20,17 @@ get_header(); ?>
 		            </div>
 		            <div class="card-footer text-muted">
 		              <?php _e( 'Posted in ' ); the_time('F jS, Y'); ?> by <?php the_author_posts_link(); ?>
+		              <?php _e( 'Halaman' ); ?>
+		              <?php the_meta(); ?>
 		            </div>
+		           
 		         </div>
 		     <?php } ?>
 	      	</div>
 	    </div>
 	</div>
 <?php  } ?>
+
 
 
 <?php get_footer(); ?>
