@@ -335,8 +335,8 @@
 
 		?>
 		<!-- label n form for meta -->
-	    <label for="my_meta_box_texts">Halaman</label>
-	    <input type="text" name="my_meta_box_text" id="my_meta_box_text" />
+	   <!--  <label for="my_meta_box_texts">Halaman</label>
+	    <input type="text" name="my_meta_box_text" id="my_meta_box_text" /> -->
 	    <?php  
 	}
 
@@ -417,10 +417,20 @@
 	      'has_archive'        => true,
 	      'hierarchical'       => false,
 	      'menu_position'      => null,
+	      'menu_icon' => 'dashicons-book',
 	      'supports'           => array( 'title','thumbnail','editor','comments')
 	    )
 	  );
 	}
+
+	function fwp_home_custom_query( $query ) {
+		if ( $query->is_home() && $query->is_main_query() ) {
+			$query->set( 'post_type', array( 'post', 'book' ) );
+		}
+	}
+	add_filter( 'pre_get_posts', 'fwp_home_custom_query' );
+
+
 
 
 

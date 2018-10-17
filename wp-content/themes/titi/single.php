@@ -1,7 +1,7 @@
 <?php 
 
 get_header(); ?>
-	
+<?php echo 'single'; ?>
 
 <?php if ( have_posts() ) { ?>
 	<div class="container">

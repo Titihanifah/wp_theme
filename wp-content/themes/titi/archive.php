@@ -1,7 +1,8 @@
 <?php 
 
-get_header(); ?>
 
+get_header(); ?>
+<?php echo 'archive'; ?>
 	<div class="container">
       	<div class="row">
       		<div class="col-md-8">
@@ -36,6 +37,7 @@ get_header(); ?>
 					            <div class="card-body">
 					              	<h2 class="card-title">';					
 					  	the_title();
+					  	echo 'archive'; 
 					  	echo '</h2><p class="card-text">';
 					  	the_excerpt();
 					  	echo '</p>';
@@ -79,6 +81,13 @@ get_header(); ?>
 			 	<div class="alignright"><?php next_posts_link('Next Entries &raquo;','') ?></div>
 			</div>
 			<div class="col-md-4">
+				<form method="GET" action="">
+					<label>Page</label>
+					<input type="number" name="page">
+					<label>Movies</label>
+					<input type="text" name="movies" value="<?php echo $_GET['movies']; ?>">
+					<button type="submit">Search</button>
+				</form>
 			</div>
         </div>
     </div>

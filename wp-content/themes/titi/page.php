@@ -1,6 +1,7 @@
 <?php 
 
 get_header(); ?>
+<?php echo 'page'; ?>
 	
 
 <?php if ( have_posts() ) { ?>

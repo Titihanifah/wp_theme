@@ -1,14 +1,16 @@
 <?php 
 
 /**
- * Template Name: Page Full Width
+ * Template Name: Page Home
  *
  * @package WordPress
  * @subpackage Titi
  */
 
 
-get_header(); ?>
+get_header(); 
+echo 'fullwidth';
+?>
 	
 
 <?php if ( have_posts() ) { ?>

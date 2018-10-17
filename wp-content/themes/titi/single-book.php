@@ -1,6 +1,7 @@
 <?php 
 
 get_header(); ?>
+<?php echo 'single-book'; ?>
 
 
 <?php if ( have_posts() ) { ?>

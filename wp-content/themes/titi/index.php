@@ -1,6 +1,9 @@
 <?php 
 
 get_header(); ?>
+<?php echo 'index'; echo 'halaman acf'; ?>
+<?php echo get_field('halaman'); ?>
+
 
 	<div class="container">
       	<div class="row">
